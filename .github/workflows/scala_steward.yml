@@ -22,7 +22,7 @@ jobs:
       - name: Launch Scala Steward
         uses: scala-steward-org/scala-steward-action@v2
         with:
-          github-token: ${{ secrets.WORKFLOW_PAT }}
+          github-token: ${{ secrets.WORKFLOW_TOKEN }}
           sign-commits: true
           signing-key: ${{ secrets.GPG_KEY_ID }}
           author-email: ${{ steps.import_gpg.outputs.email }}

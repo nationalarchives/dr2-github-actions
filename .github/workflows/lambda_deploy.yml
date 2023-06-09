@@ -19,7 +19,7 @@ on:
         required: true
       MANAGEMENT_ACCOUNT:
         required: true
-      WORKFLOW_PAT:
+      WORKFLOW_TOKEN:
         required: true
       SLACK_WEBHOOK:
         required: true
