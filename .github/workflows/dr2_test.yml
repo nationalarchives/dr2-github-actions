@@ -19,8 +19,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: nationalarchives/dr2-github-actions/.github/actions/run-git-secrets@dr2-github-actions
-      - uses: nationalarchives/dr2-github-actions/.github/actions/slack-send@dr2-github-actions
+      - uses: nationalarchives/dr2-github-actions/.github/actions/run-git-secrets@main
+      - uses: nationalarchives/dr2-github-actions/.github/actions/slack-send@main
         if: failure()
         with:
           message: ":warning: Secrets found in repository ${{ inputs.repo-name }}"
