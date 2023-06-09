@@ -1,0 +1,29 @@
+name: DR2 Run git secrets and tests
+on:
+  workflow_call:
+    inputs:
+      repo-name:
+        required: true
+        type: string
+      test-command:
+        required: true
+        type: string
+    secrets:
+      MANAGEMENT_ACCOUNT:
+        required: false
+      SLACK_WEBHOOK:
+        required: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: nationalarchives/dr2-github-actions/.github/actions/run-git-secrets@main
+      - uses: nationalarchives/dr2-github-actions/.github/actions/slack-send@main
+        if: failure()
+        with:
+          message: ":warning: Secrets found in repository ${{ inputs.repo-name }}"
+          slack-url: ${{ secrets.SLACK_WEBHOOK }}
+      - uses: coursier/cache-action@v6
+      - run: ${{ inputs.test-command }}

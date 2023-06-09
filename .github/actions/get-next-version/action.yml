@@ -1,0 +1,27 @@
+name: 'Get the next version'
+description: 'Gets the next version based on the existing git tag'
+inputs:
+  repo-name:
+    description: 'The name of the repository'
+    required: true
+outputs:
+  next-version:
+    description: The next version for the repository
+    value: ${{ steps.next-tag.outputs.next-version }}
+runs:
+  using: "composite"
+  steps:
+    - run: pip install requests semver
+      shell: bash
+    - id: next-tag
+      run: |
+         import requests, re, semver, os
+         json = requests.get("${{ github.api_url }}/repos/nationalarchives/${{ inputs.repo-name }}/tags").json()
+         version = json[0]['name']
+         with open(os.environ['GITHUB_OUTPUT'], 'a') as fh: 
+           if re.search("v\d*$", version) != None:
+             print(f"next-version=v{int(version[1:]) + 1}", file=fh)
+           else:
+             next_version = str(semver.parse_version_info(version[1:]).bump_patch())
+             print(f"next-version=v{next_version}", file=fh)
+      shell: python
