@@ -33,8 +33,8 @@ jobs:
           role-to-assume: arn:aws:iam::${{ secrets.MANAGEMENT_ACCOUNT }}:role/MgmtDPGithubTerraformEnvironmentsRoleIntg
           aws-region: eu-west-2
           role-session-name: TerraformRole
-      - uses: nationalarchives/dr2-github-actions/.github/actions/run-git-secrets@main
-      - uses: nationalarchives/dr2-github-actions/.github/actions/slack-send@main
+      - uses: nationalarchives/dr2-github-actions/.github/actions/run-git-secrets@temp-branch
+      - uses: nationalarchives/dr2-github-actions/.github/actions/slack-send@temp-branch
         if: failure()
         with:
           message: ":warning: Secrets found in repository ${{ inputs.repo-name }}"
