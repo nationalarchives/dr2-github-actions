@@ -1,0 +1,66 @@
+name: DR2 Deploy to Lambda
+on:
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+      lambda-name:
+        required: true
+        type: string
+      deployment-package:
+        required: true
+        type: string
+      to-deploy:
+        required: true
+        type: string
+    secrets:
+      ACCOUNT_NUMBER:
+        required: true
+      MANAGEMENT_ACCOUNT:
+        required: true
+      WORKFLOW_TOKEN:
+        required: true
+      SLACK_WEBHOOK:
+        required: true
+permissions:
+  id-token: write
+  contents: write
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - id: role-name
+        run: |
+          import os
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as fh: 
+            print(f"role-name={'${{ inputs.environment }}'.title()}DPGithubActionsDeployLambdaRole", file=fh)
+        shell: python
+      - name: Configure AWS credentials for Lambda
+        uses: aws-actions/configure-aws-credentials@v1-node16
+        with:
+          role-to-assume: arn:aws:iam::${{ secrets.ACCOUNT_NUMBER }}:role/${{ steps.role-name.outputs.role-name }}
+          aws-region: eu-west-2
+          role-session-name: ECRLogin
+      - name: Deploy to lambda
+        run: |
+              aws lambda update-function-code --function-name dp-${{ inputs.lambda-name }}-${{ inputs.environment }} --s3-bucket mgmt-dp-code-deploy --s3-key ${{ inputs.to-deploy }}/${{ inputs.deployment-package }} > /dev/null
+              aws lambda wait function-updated --function-name dp-${{ inputs.lambda-name }}-${{ inputs.environment }} > /dev/null
+      - name: Send success message
+        uses: nationalarchives/dr2-github-actions/.github/actions/slack-send@main
+        with:
+          message: ":white_check_mark: Service ${{ inputs.lambda-name }} updated to version ${{ inputs.to-deploy }} in ${{ inputs.environment }}"
+          slack-url: ${{ secrets.SLACK_WEBHOOK }}
+      - name: Update release branch
+        run: |
+          git branch -f release-${{ inputs.environment }} HEAD
+          git push -f origin release-${{ inputs.environment }}
+      - name: Send failure message
+        uses: nationalarchives/dr2-github-actions/.github/actions/slack-send@main
+        if: failure()
+        with:
+          message: ":warning: Build failed for ${{ inputs.lambda-name }}"
+          slack-url: ${{ secrets.SLACK_WEBHOOK }}

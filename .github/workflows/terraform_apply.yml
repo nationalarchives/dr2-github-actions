@@ -1,0 +1,139 @@
+name: DP Terraform plan and apply
+on:
+  workflow_call:
+    inputs:
+      working-directory:
+        type: string
+        required: false
+        default: .
+      repo-name:
+        type: string
+        required: true
+      environment:
+        type: string
+        required: true
+    secrets:
+      MANAGEMENT_ACCOUNT:
+        required: true
+      WORKFLOW_TOKEN:
+        required: true
+      SLACK_WEBHOOK:
+        required: true
+      ACCOUNT_NUMBER:
+        required: true
+      INTG_ACCOUNT_NUMBER:
+        required: false
+      STAGING_ACCOUNT_NUMBER:
+        required: false
+      PROD_ACCOUNT_NUMBER:
+        required: false
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    outputs:
+      account-number-secret: ${{ steps.set-environment-names.outputs.account_number_secret }}
+      title-environment: ${{ steps.set-environment-names.outputs.title_environment }}
+    steps:
+      - id: set-environment-names
+        run: |
+          import os
+          env = "${{ inputs.environment }}"
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as fh:
+            print(f"title_environment={env.title()}", file=fh)
+            print(f"account_number_secret={env.upper()}_ACCOUNT_NUMBER", file=fh)
+        shell: python
+  plan:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ inputs.working-directory }}
+    needs: setup
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+          token: ${{ secrets.WORKFLOW_TOKEN }}
+      - name: Configure AWS credentials for Lambda
+        uses: aws-actions/configure-aws-credentials@v1-node16
+        with:
+          role-to-assume: arn:aws:iam::${{ secrets.MANAGEMENT_ACCOUNT }}:role/MgmtDPGithubTerraformEnvironmentsRole${{ needs.setup.outputs.title-environment }}
+          aws-region: eu-west-2
+          role-session-name: TerraformRole
+      - uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: 1.3.2
+      - name: Terraform Plan
+        id: plan
+        env:
+          GITHUB_OWNER: nationalarchives
+          GITHUB_TOKEN: ${{ secrets.WORKFLOW_TOKEN }}
+          TF_VAR_dp_account_number: ${{ secrets[needs.setup.outputs.account-number-secret] }}
+          TF_VAR_project: dr2
+        run: |
+          terraform init
+          terraform workspace select ${{ inputs.environment }}
+          pip install boto3
+          terraform plan -no-color -out=out > /dev/null
+          terraform show -no-color out > out.plan
+          python $GITHUB_WORKSPACE/.github/scripts/logs.py out.plan "${{ github.run_id }}${{ github.run_attempt }}" ${{ inputs.environment }}
+      - uses: nationalarchives/dr2-github-actions/.github/actions/slack-send@main
+        with:
+          message: |
+            :book: Terraform plan ready for repository ${{ inputs.repo-name }} environment ${{ inputs.environment }}
+            :log: View the <${{ steps.plan.outputs.log-url }}|plan logs> in the management account.
+            :white_check_mark: <https://github.com/nationalarchives/${{ inputs.repo-name }}/actions/runs/${{ github.run_id }}|Approve the workflow>
+          slack-url: ${{ secrets.SLACK_WEBHOOK }}
+  apply:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ inputs.working-directory }}
+    needs:
+      - plan
+      - setup
+    environment: ${{ inputs.environment }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+          token: ${{ secrets.WORKFLOW_TOKEN }}
+      - name: Configure AWS credentials for Lambda
+        uses: aws-actions/configure-aws-credentials@v1-node16
+        with:
+          role-to-assume: arn:aws:iam::${{ secrets.MANAGEMENT_ACCOUNT }}:role/MgmtDPGithubTerraformEnvironmentsRole${{ needs.setup.outputs.title-environment }}
+          aws-region: eu-west-2
+          role-session-name: TerraformRole
+      - uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: 1.3.2
+      - name: Run apply
+        env:
+          GITHUB_OWNER: nationalarchives
+          GITHUB_TOKEN: ${{ secrets.WORKFLOW_TOKEN }}
+          TF_VAR_dp_account_number: ${{ secrets.ACCOUNT_NUMBER }}
+        run: |
+          terraform init
+          terraform workspace select ${{ inputs.environment }}
+          terraform apply --auto-approve > /dev/null
+      - id: next-tag
+        uses: nationalarchives/dr2-github-actions/.github/actions/get-next-version@main
+        with:
+          repo-name: ${{ inputs.repo-name }}
+      - run: |
+          git tag ${{ steps.next-tag.outputs.next-version }}
+          git push origin ${{ steps.next-tag.outputs.next-version }}
+          git branch -f release-${{ inputs.environment }} HEAD
+          git push -f origin release-${{ inputs.environment }}
+      - name: Send failure message
+        if: failure()
+        uses: nationalarchives/dr2-github-actions/.github/actions/slack-send@main
+        with:
+          message: ":warning: ${{ inputs.repo-name }} deploy failed for ${{ inputs.environment }}"
+          slack-url: ${{ secrets.SLACK_WEBHOOK }}
+      - name: Send success message
+        uses: nationalarchives/dr2-github-actions/.github/actions/slack-send@main
+        with:
+          message: ":white_check_mark: ${{ inputs.repo-name }} deploy successful for ${{ inputs.environment }}"
+          slack-url: ${{ secrets.SLACK_WEBHOOK }}
