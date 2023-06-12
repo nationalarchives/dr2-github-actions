@@ -69,6 +69,7 @@ jobs:
           GITHUB_OWNER: nationalarchives
           GITHUB_TOKEN: ${{ secrets.WORKFLOW_TOKEN }}
           TF_VAR_dp_account_number: ${{ secrets[needs.setup.outputs.account-number-secret] }}
+          TF_VAR_project: dr2
         run: |
           terraform init
           terraform workspace select ${{ inputs.environment }}
