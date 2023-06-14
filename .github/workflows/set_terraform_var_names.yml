@@ -1,0 +1,79 @@
+name: DR2 Set Terraform secret variable names
+on:
+  workflow_call:
+    inputs:
+      project:
+        required: true
+        type: string
+      environment:
+        required: true
+        type: string
+    outputs:
+      account-number:
+        description: 'The name for the account number variable. PROJECT_ENVIRONMENT_ACCOUNT_NUMBER'
+        value: ${{ jobs.setup.outputs.account-number }}
+      management-account:
+        description: 'The name for the management account number variable. PROJECT_MANAGEMENT_ACCOUNT'
+        value: ${{ jobs.setup.outputs.account-number }}
+      email-address:
+        description: 'The email to send cloud custodian notifications to'
+        value: ${{ jobs.setup.outputs.email }}
+      project-upper:
+        description: 'Upper case project name'
+        value: ${{ jobs.setup.outputs.project-upper }}
+      terraform-role:
+        description: 'The name of the terraform role variable PROJECT_ENVIRONMENT_TERRAFORM_ROLE'
+        value: ${{ jobs.setup.outputs.terraform-role }}
+      custodian-role:
+        description: 'The name of the custodian role variable PROJECT_ENVIRONMENT_CUSTODIAN_ROLE'
+        value: ${{ jobs.setup.outputs.custodian-role }}
+      state-bucket:
+        description: 'The name of the state bucket. These are split by environment but its possible to have one state bucket for all environments'
+        value: ${{ jobs.setup.outputs.state-bucket }}
+      dynamo-table:
+        description: 'The name of the dynamo lock table. These are split by environment but its possible to have one lock table for all environments'
+        value: ${{ jobs.setup.outputs.dynamo-table }}
+      slack-webhook:
+        description: 'The slack webhook for this project'
+        value: ${{ jobs.setup.outputs.slack-webhook }}
+      workflow-token:
+        description: 'The workflow token for this project'
+        value: ${{ jobs.setup.outputs.workflow-token }}
+      terraform-external-id:
+        description: 'The external ID to use with the terraform role'
+        value: ${{ jobs.setup.outputs.terraform-external-id }}
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    outputs:
+      account-number: ${{ steps.set-variable-names.outputs.account_number }}
+      management-account: ${{ steps.set-variable-names.outputs.management_account }}
+      email: ${{ steps.set-variable-names.outputs.email }}
+      project-upper: ${{ steps.set-variable-names.outputs.project_upper }}
+      terraform-role: ${{ steps.set-variable-names.outputs.terraform_role }}
+      custodian-role: ${{ steps.set-variable-names.outputs.custodian_role }}
+      state-bucket: ${{ steps.set-variable-names.outputs.state_bucket }}
+      dynamo-table: ${{ steps.set-variable-names.outputs.dynamo_table }}
+      slack-webhook: ${{ steps.set-variable-names.outputs.slack_webhook }}
+      workflow-token: ${{ steps.set-variable-names.outputs.workflow_pat }}
+      terraform-external-id: ${{ steps.set-variable-names.outputs.terraform_external_id }}
+    steps:
+      - id: set-variable-names
+        run: |
+          import os
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as fh:
+              project = "${{ github.event.inputs.project }}".upper()
+              env = "${{ github.event.inputs.environment }}".upper()
+              print(f"project_upper={project}", file=fh)
+              print(f"environment_upper={env}", file=fh)
+              print(f"management_account={project}_MANAGEMENT_ACCOUNT", file=fh)
+              print(f"management_account={project}_EMAIL_ADDRESS", file=fh)
+              print(f"account_number={project}_{env}_ACCOUNT_NUMBER", file=fh)
+              print(f"terraform_role={project}_{env}_TERRAFORM_ROLE", file=fh)
+              print(f"custodian_role={project}_{env}_CUSTODIAN_ROLE", file=fh)
+              print(f"state_bucket={project}_{env}_STATE_BUCKET", file=fh)
+              print(f"dynamo_table={project}_{env}_DYNAMO_TABLE", file=fh)
+              print(f"slack_webhook={project}_SLACK_WEBHOOK", file=fh)
+              print(f"workflow_pat={project}_WORKFLOW_PAT", file=fh)
+              print(f"terraform_external_id={project}_{env}_TERRAFORM_EXTERNAL_ID", file=fh)
+        shell: python
