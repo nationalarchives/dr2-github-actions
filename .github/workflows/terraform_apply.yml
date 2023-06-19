@@ -38,6 +38,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
         with:
+          repository: nationalarchives/${{ inputs.repo-name }}
           submodules: recursive
           token: ${{ secrets.WORKFLOW_TOKEN }}
       - name: Configure AWS credentials for Lambda
