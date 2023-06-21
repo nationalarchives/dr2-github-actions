@@ -15,6 +15,10 @@ on:
         required: true
       WORKFLOW_TOKEN:
         required: true
+      STATE_BUCKET:
+        required: true
+      DYNAMO_TABLE:
+        required: true
 jobs:
   terraform-check:
     runs-on: ubuntu-latest
@@ -47,7 +51,7 @@ jobs:
         run: terraform fmt -check --recursive
       - name: Terraform Init
         id: init
-        run: terraform init
+        run: terraform init -backend-config="bucket=${{ secrets.STATE_BUCKET }}" --backend-config="dynamodb_table=${{ secrets.DYNAMO_TABLE }}"
       - name: Select integration workspace
         if: inputs.use-workspace
         run: terraform workspace select intg
