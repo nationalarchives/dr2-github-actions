@@ -49,7 +49,7 @@ jobs:
           role-session-name: TerraformRole
       - uses: hashicorp/setup-terraform@v1
         with:
-          terraform_version: 1.3.2
+          terraform_version: 1.5.1
       - name: Terraform Plan
         id: plan
         env:
@@ -96,7 +96,7 @@ jobs:
           role-session-name: TerraformRole
       - uses: hashicorp/setup-terraform@v1
         with:
-          terraform_version: 1.3.2
+          terraform_version: 1.5.1
       - name: Run apply
         env:
           GITHUB_OWNER: nationalarchives
