@@ -47,8 +47,8 @@ jobs:
           role-session-name: ECRLogin
       - name: Deploy to lambda
         run: |
-              aws lambda update-function-code --function-name dp-${{ inputs.lambda-name }}-${{ inputs.environment }} --s3-bucket mgmt-dp-code-deploy --s3-key ${{ inputs.to-deploy }}/${{ inputs.deployment-package }} > /dev/null
-              aws lambda wait function-updated --function-name dp-${{ inputs.lambda-name }}-${{ inputs.environment }} > /dev/null
+              aws lambda update-function-code --function-name ${{ inputs.lambda-name }} --s3-bucket mgmt-dp-code-deploy --s3-key ${{ inputs.to-deploy }}/${{ inputs.deployment-package }} > /dev/null
+              aws lambda wait function-updated --function-name ${{ inputs.lambda-name }} > /dev/null
       - name: Send success message
         uses: nationalarchives/dr2-github-actions/.github/actions/slack-send@main
         with:
