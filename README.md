@@ -32,7 +32,7 @@ jobs:
   test:
     uses: nationalarchives/dr2-github-actions/.github/workflows/dr2_test.yml@main
     with:
-      repo-name: dp-preservica-client
+      repo-name: dr2-preservica-client
       test-command: |
         sbt test
     secrets:
