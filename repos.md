@@ -1,6 +1,10 @@
 # repos.md
-- dr2-preservica-client
-- dr2-preservica-config
-- dr2-lambda-template.g8
-- dr2-ingest-parsed-court-document-event-handler
-- dr2-entity-event-generator
+- nationalarchives/dr2-preservica-client
+- nationalarchives/dr2-preservica-config
+- nationalarchives/dr2-lambda-template.g8
+- nationalarchives/dr2-ingest-parsed-court-document-event-handler
+- nationalarchives/dr2-entity-event-generator
+- nationalarchives/dr2-ingest-upsert-archive-folders
+- nationalarchives/dr2-ingest-folder-opex-creator
+- nationalarchives/dr2-ingest-asset-opex-creator
+- nationalarchives/dr2-ingest-mapper
