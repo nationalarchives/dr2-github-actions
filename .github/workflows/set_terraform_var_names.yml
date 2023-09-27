@@ -62,8 +62,8 @@ jobs:
         run: |
           import os
           with open(os.environ['GITHUB_OUTPUT'], 'a') as fh:
-              project = "${{ github.event.inputs.project }}".upper()
-              env = "${{ github.event.inputs.environment }}".upper()
+              project = "${{ inputs.project }}".upper()
+              env = "${{ inputs.environment }}".upper()
               print(f"project_upper={project}", file=fh)
               print(f"environment_upper={env}", file=fh)
               print(f"management_account={project}_MANAGEMENT_ACCOUNT", file=fh)
