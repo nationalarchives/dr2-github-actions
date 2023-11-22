@@ -53,3 +53,9 @@ jobs:
         with:
           message: ":white_check_mark: ${{ inputs.library-name }} has been published"
           slack-url: ${{ secrets.SLACK_WEBHOOK }}
+      - name: Send failure message
+        uses: nationalarchives/dr2-github-actions/.github/actions/slack-send@main
+        if: failure()
+        with:
+          message: ":warning: Build failed for ${{ inputs.library-name }}"
+          slack-url: ${{ secrets.SLACK_WEBHOOK }}
