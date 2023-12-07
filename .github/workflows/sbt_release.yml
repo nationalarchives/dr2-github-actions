@@ -6,6 +6,10 @@ on:
         required: false
         type: string
         description: The name of the library to publish
+      repo-name:
+        required: false
+        type: string
+        description: The name of the repo
     secrets:
       WORKFLOW_PAT:
         required: true
@@ -57,5 +61,5 @@ jobs:
         uses: nationalarchives/dr2-github-actions/.github/actions/slack-send@main
         if: failure()
         with:
-          message: ":warning: Build failed for ${{ inputs.library-name }}"
+          message: ":warning: Build failed for ${{ inputs.library-name }} <https://github.com/nationalarchives/${{ inputs.repo-name }}/actions/runs/${{ github.run_id }}|View the failed workflow>"
           slack-url: ${{ secrets.SLACK_WEBHOOK }}

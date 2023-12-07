@@ -64,5 +64,5 @@ jobs:
         uses: nationalarchives/dr2-github-actions/.github/actions/slack-send@main
         if: failure()
         with:
-          message: ":warning: Build failed for ${{ inputs.repo-name }}"
+          message: ":warning: Build failed for ${{ inputs.repo-name }} <https://github.com/nationalarchives/${{ inputs.repo-name }}/actions/runs/${{ github.run_id }}|View the failed workflow>"
           slack-url: ${{ secrets.SLACK_WEBHOOK }}
