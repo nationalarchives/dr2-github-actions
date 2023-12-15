@@ -9,3 +9,5 @@
 - nationalarchives/dr2-ingest-folder-opex-creator
 - nationalarchives/dr2-ingest-asset-opex-creator
 - nationalarchives/dr2-ingest-mapper
+- nationalarchives/dr2-start-workflow
+- nationalarchives/dr2-s3-copy
