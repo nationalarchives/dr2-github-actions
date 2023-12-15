@@ -11,3 +11,4 @@
 - nationalarchives/dr2-ingest-mapper
 - nationalarchives/dr2-start-workflow
 - nationalarchives/dr2-s3-copy
+- nationalarchives/dr2-ingest-parent-folder-opex-creator
