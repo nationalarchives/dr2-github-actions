@@ -48,8 +48,6 @@ jobs:
           aws-region: eu-west-2
           role-session-name: TerraformRole
       - uses: hashicorp/setup-terraform@v3
-        with:
-          terraform_version: 1.5.1
       - name: Terraform Plan
         id: plan
         env:
@@ -95,8 +93,6 @@ jobs:
           aws-region: eu-west-2
           role-session-name: TerraformRole
       - uses: hashicorp/setup-terraform@v3
-        with:
-          terraform_version: 1.5.1
       - name: Run apply
         env:
           GITHUB_OWNER: nationalarchives
