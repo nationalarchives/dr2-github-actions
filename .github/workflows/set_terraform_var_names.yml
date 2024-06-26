@@ -15,7 +15,7 @@ on:
       management-account:
         description: 'The name for the management account number variable. PROJECT_MANAGEMENT_ACCOUNT'
         value: ${{ jobs.setup.outputs.management-account }}
-      email-address:
+      email:
         description: 'The email to send cloud custodian notifications to'
         value: ${{ jobs.setup.outputs.email }}
       project-upper:
