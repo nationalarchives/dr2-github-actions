@@ -67,7 +67,7 @@ jobs:
               print(f"project_upper={project}", file=fh)
               print(f"environment_upper={env}", file=fh)
               print(f"management_account={project}_MANAGEMENT_ACCOUNT", file=fh)
-              print(f"email_address={project}_EMAIL_ADDRESS", file=fh)
+              print(f"email={project}_EMAIL_ADDRESS", file=fh)
               print(f"account_number={project}_{env}_ACCOUNT_NUMBER", file=fh)
               print(f"terraform_role={project}_{env}_TERRAFORM_ROLE", file=fh)
               print(f"custodian_role={project}_{env}_CUSTODIAN_ROLE", file=fh)
