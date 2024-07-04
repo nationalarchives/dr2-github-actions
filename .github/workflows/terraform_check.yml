@@ -45,7 +45,7 @@ jobs:
           slack-url: ${{ secrets.SLACK_WEBHOOK }}
       - uses: hashicorp/setup-terraform@v3
         with:
-          terraform_version: 1.5.1
+          terraform_version: 1.9.1
       - name: Terraform Format
         id: fmt
         run: terraform fmt -check --recursive
