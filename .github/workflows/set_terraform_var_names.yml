@@ -14,8 +14,8 @@ on:
         value: ${{ jobs.setup.outputs.account-number }}
       management-account:
         description: 'The name for the management account number variable. PROJECT_MANAGEMENT_ACCOUNT'
-        value: ${{ jobs.setup.outputs.account-number }}
-      email-address:
+        value: ${{ jobs.setup.outputs.management-account }}
+      email:
         description: 'The email to send cloud custodian notifications to'
         value: ${{ jobs.setup.outputs.email }}
       project-upper:
@@ -67,7 +67,7 @@ jobs:
               print(f"project_upper={project}", file=fh)
               print(f"environment_upper={env}", file=fh)
               print(f"management_account={project}_MANAGEMENT_ACCOUNT", file=fh)
-              print(f"management_account={project}_EMAIL_ADDRESS", file=fh)
+              print(f"email={project}_EMAIL_ADDRESS", file=fh)
               print(f"account_number={project}_{env}_ACCOUNT_NUMBER", file=fh)
               print(f"terraform_role={project}_{env}_TERRAFORM_ROLE", file=fh)
               print(f"custodian_role={project}_{env}_CUSTODIAN_ROLE", file=fh)
