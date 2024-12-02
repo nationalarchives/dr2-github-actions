@@ -17,7 +17,7 @@ on:
         required: true
       DYNAMO_TABLE:
         required: true
-      DR2_INTG_TERRAFORM_ROLE:
+      TERRAFORM_ROLE:
         required: true
 jobs:
   terraform-check:
