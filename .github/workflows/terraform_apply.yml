@@ -24,10 +24,6 @@ on:
         required: true
       TERRAFORM_ROLE:
         required: true
-      STATE_BUCKET:
-        required: true
-      DYNAMO_TABLE:
-        required: true
 jobs:
   plan:
     runs-on: ubuntu-latest
@@ -56,7 +52,7 @@ jobs:
           TF_VAR_account_number: ${{ secrets.ACCOUNT_NUMBER }}
           TF_VAR_project: ${{ inputs.project }}
         run: |
-          terraform init -backend-config="bucket=${{ secrets.STATE_BUCKET }}" --backend-config="dynamodb_table=${{ secrets.DYNAMO_TABLE }}"
+          terraform init 
           terraform workspace select ${{ github.event.inputs.environment }}
           pip install boto3
           set -e
@@ -100,7 +96,7 @@ jobs:
           TF_VAR_account_number: ${{ secrets.ACCOUNT_NUMBER }}
           TF_VAR_project: ${{ inputs.project }}
         run: |
-          terraform init -backend-config="bucket=${{ secrets.STATE_BUCKET }}" --backend-config="dynamodb_table=${{ secrets.DYNAMO_TABLE }}"
+          terraform init
           terraform workspace select ${{ github.event.inputs.environment }}
           pip install boto3
           set -e
