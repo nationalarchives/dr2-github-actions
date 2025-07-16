@@ -30,11 +30,11 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: sbt/setup-sbt@v1
+      - uses: actions/checkout@09d2acae674a48949e3602304ab46fd20ae0c42f
+      - uses: sbt/setup-sbt@3c1652372d153b35a30472b3e5b2f1f204eff746
       - name: Import GPG key
         id: import_gpg
-        uses: crazy-max/ghaction-import-gpg@v6
+        uses: crazy-max/ghaction-import-gpg@e89d40939c28e39f97cf32126055eeae86ba74ec
         with:
           git_user_signingkey: true
           git_commit_gpgsign: true
@@ -54,12 +54,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.WORKFLOW_PAT }}
       - name: Send success message
-        uses: nationalarchives/dr2-github-actions/.github/actions/slack-send@main
+        uses: nationalarchives/dr2-github-actions/.github/actions/slack-send@917201e254f112ff041b952dae76ef767cae7378
         with:
           message: ":white_check_mark: ${{ inputs.library-name }} has been published"
           slack-url: ${{ secrets.SLACK_WEBHOOK }}
       - name: Send failure message
-        uses: nationalarchives/dr2-github-actions/.github/actions/slack-send@main
+        uses: nationalarchives/dr2-github-actions/.github/actions/slack-send@917201e254f112ff041b952dae76ef767cae7378
         if: failure()
         with:
           message: ":warning: Build failed for ${{ inputs.library-name }} <https://github.com/nationalarchives/${{ inputs.repo-name }}/actions/runs/${{ github.run_id }}|View the failed workflow>"

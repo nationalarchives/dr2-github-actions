@@ -38,17 +38,17 @@ jobs:
     outputs:
       next-version: ${{ steps.next-tag.outputs.next-version }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: coursier/cache-action@v6
+      - uses: actions/checkout@09d2acae674a48949e3602304ab46fd20ae0c42f
+      - uses: coursier/cache-action@4e2615869d13561d626ed48655e1a39e5b192b3c
       - name: Configure AWS credentials from management account
-        uses: aws-actions/configure-aws-credentials@v4.2.1
+        uses: aws-actions/configure-aws-credentials@a159d7bb5354cf786f855f2f5d1d8d768d9a08d1
         with:
           role-to-assume: arn:aws:iam::${{ secrets.MANAGEMENT_ACCOUNT }}:role/MgmtDPGithubCodeDeploy
           aws-region: eu-west-2
           role-session-name: GitHubActionsRole
       - run: pip install requests
       - id: next-tag
-        uses: nationalarchives/dr2-github-actions/.github/actions/get-next-version@main
+        uses: nationalarchives/dr2-github-actions/.github/actions/get-next-version@917201e254f112ff041b952dae76ef767cae7378
         with:
           repo-name: ${{ inputs.repo-name }}
       - name: Build new image version
@@ -61,7 +61,7 @@ jobs:
           git push origin ${{ steps.next-tag.outputs.next-version }}
           gh release create ${{ steps.next-tag.outputs.next-version }} ${{ inputs.artifact-path }}/${{ inputs.artifact-name }}.${{ inputs.artifact-file-type }}
       - name: Send failure message
-        uses: nationalarchives/dr2-github-actions/.github/actions/slack-send@main
+        uses: nationalarchives/dr2-github-actions/.github/actions/slack-send@917201e254f112ff041b952dae76ef767cae7378
         if: failure()
         with:
           message: ":warning: Build failed for ${{ inputs.repo-name }} <https://github.com/nationalarchives/${{ inputs.repo-name }}/actions/runs/${{ github.run_id }}|View the failed workflow>"
