@@ -27,23 +27,23 @@ jobs:
         working-directory: ${{ inputs.working-directory }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@09d2acae674a48949e3602304ab46fd20ae0c42f
         with:
           submodules: recursive
           token: ${{ secrets.WORKFLOW_TOKEN }}
       - name: Configure AWS credentials for Lambda
-        uses: aws-actions/configure-aws-credentials@v4.2.1
+        uses: aws-actions/configure-aws-credentials@a159d7bb5354cf786f855f2f5d1d8d768d9a08d1
         with:
           role-to-assume: ${{ secrets.TERRAFORM_ROLE }}
           aws-region: eu-west-2
           role-session-name: TerraformRole
-      - uses: nationalarchives/dr2-github-actions/.github/actions/run-git-secrets@main
-      - uses: nationalarchives/dr2-github-actions/.github/actions/slack-send@main
+      - uses: nationalarchives/dr2-github-actions/.github/actions/run-git-secrets@917201e254f112ff041b952dae76ef767cae7378
+      - uses: nationalarchives/dr2-github-actions/.github/actions/slack-send@917201e254f112ff041b952dae76ef767cae7378
         if: failure()
         with:
           message: ":warning: Secrets found in repository: *${{ inputs.repo-name }}* @channel"
           slack-url: ${{ secrets.SLACK_WEBHOOK }}
-      - uses: hashicorp/setup-terraform@v3
+      - uses: hashicorp/setup-terraform@1428cf060329a44e3a0ee695a66e5b3f2409ec85
         with:
           terraform_version: 1.9.8
       - name: Terraform Format

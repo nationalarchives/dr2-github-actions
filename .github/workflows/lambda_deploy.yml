@@ -32,7 +32,7 @@ jobs:
     environment: ${{ inputs.environment }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@09d2acae674a48949e3602304ab46fd20ae0c42f
       - id: role-name
         run: |
           import os
@@ -40,7 +40,7 @@ jobs:
             print(f"role-name={'${{ inputs.environment }}'.title()}DPGithubActionsDeployLambdaRole", file=fh)
         shell: python
       - name: Configure AWS credentials for Lambda
-        uses: aws-actions/configure-aws-credentials@v4.2.1
+        uses: aws-actions/configure-aws-credentials@a159d7bb5354cf786f855f2f5d1d8d768d9a08d1
         with:
           role-to-assume: arn:aws:iam::${{ secrets.ACCOUNT_NUMBER }}:role/${{ steps.role-name.outputs.role-name }}
           aws-region: eu-west-2
@@ -50,7 +50,7 @@ jobs:
               aws lambda update-function-code --function-name ${{ inputs.lambda-name }} --s3-bucket mgmt-dp-code-deploy --s3-key ${{ inputs.to-deploy }}/${{ inputs.deployment-package }} > /dev/null
               aws lambda wait function-updated --function-name ${{ inputs.lambda-name }} > /dev/null
       - name: Send success message
-        uses: nationalarchives/dr2-github-actions/.github/actions/slack-send@main
+        uses: nationalarchives/dr2-github-actions/.github/actions/slack-send@917201e254f112ff041b952dae76ef767cae7378
         with:
           message: ":white_check_mark: Service ${{ inputs.lambda-name }} updated to version ${{ inputs.to-deploy }} in ${{ inputs.environment }}"
           slack-url: ${{ secrets.SLACK_WEBHOOK }}
@@ -59,7 +59,7 @@ jobs:
           git branch -f release-${{ inputs.environment }} HEAD
           git push -f origin release-${{ inputs.environment }}
       - name: Send failure message
-        uses: nationalarchives/dr2-github-actions/.github/actions/slack-send@main
+        uses: nationalarchives/dr2-github-actions/.github/actions/slack-send@917201e254f112ff041b952dae76ef767cae7378
         if: failure()
         with:
           message: ":warning: Build failed for ${{ inputs.lambda-name }}"
