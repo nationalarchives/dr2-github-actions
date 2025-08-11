@@ -18,7 +18,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@8edcb1bdb4e267140fa742c62e395cd74f332709
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
       - uses: sbt/setup-sbt@3c1652372d153b35a30472b3e5b2f1f204eff746
       - uses: coursier/cache-action@4e2615869d13561d626ed48655e1a39e5b192b3c
       - uses: actions/setup-java@e9343db97e09d87a3c50e544105d99fe912c204b
