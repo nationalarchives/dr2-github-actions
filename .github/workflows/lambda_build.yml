@@ -38,7 +38,7 @@ jobs:
     outputs:
       next-version: ${{ steps.next-tag.outputs.next-version }}
     steps:
-      - uses: actions/checkout@8edcb1bdb4e267140fa742c62e395cd74f332709
+      - uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493
       - uses: coursier/cache-action@4e2615869d13561d626ed48655e1a39e5b192b3c
       - name: Configure AWS credentials from management account
         uses: aws-actions/configure-aws-credentials@59b441846ad109fa4a1549b73ef4e149c4bfb53b
