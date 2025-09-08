@@ -43,7 +43,7 @@ jobs:
         with:
           message: ":warning: Secrets found in repository: *${{ inputs.repo-name }}* @channel"
           slack-url: ${{ secrets.SLACK_WEBHOOK }}
-      - uses: hashicorp/setup-terraform@7a4a56811146d789e67a522cd28b55faa5d6f788
+      - uses: hashicorp/setup-terraform@08cace20605885b578dc4e35c4de153cac368cf3
         with:
           terraform_version: 1.9.8
       - name: Terraform Format
