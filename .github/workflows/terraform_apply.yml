@@ -43,7 +43,7 @@ jobs:
           role-to-assume: ${{ secrets.TERRAFORM_ROLE }}
           aws-region: eu-west-2
           role-session-name: TerraformRole
-      - uses: hashicorp/setup-terraform@fe38bfbb36d6c5a1f3f64ef96bba7f30dfe0f038
+      - uses: hashicorp/setup-terraform@afa38526df51b6d16447109ab1e21fada7d93d63
       - name: Terraform Plan
         id: plan
         env:
@@ -88,7 +88,7 @@ jobs:
           role-to-assume: ${{ secrets.TERRAFORM_ROLE }}
           aws-region: eu-west-2
           role-session-name: TerraformRole
-      - uses: hashicorp/setup-terraform@fe38bfbb36d6c5a1f3f64ef96bba7f30dfe0f038
+      - uses: hashicorp/setup-terraform@afa38526df51b6d16447109ab1e21fada7d93d63
       - name: Run apply
         env:
           GITHUB_OWNER: nationalarchives
