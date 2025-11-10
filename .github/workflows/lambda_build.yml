@@ -41,7 +41,7 @@ jobs:
       - uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493
       - uses: coursier/cache-action@bebeeb0e6f48ebad66d3783946588ecf43114433
       - name: Configure AWS credentials from management account
-        uses: aws-actions/configure-aws-credentials@0d00a56e021d460a2d2bb10b9d8f94f6693a71ad
+        uses: aws-actions/configure-aws-credentials@2475ef7675c7f555fe065dad4cbebafc7f953779
         with:
           role-to-assume: arn:aws:iam::${{ secrets.MANAGEMENT_ACCOUNT }}:role/MgmtDPGithubCodeDeploy
           aws-region: eu-west-2
