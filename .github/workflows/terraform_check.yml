@@ -27,12 +27,12 @@ jobs:
         working-directory: ${{ inputs.working-directory }}
     steps:
       - name: Checkout
-        uses: actions/checkout@71cf2267d89c5cb81562390fa70a37fa40b1305e
+        uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3
         with:
           submodules: recursive
           token: ${{ secrets.WORKFLOW_TOKEN }}
       - name: Configure AWS credentials for Lambda
-        uses: aws-actions/configure-aws-credentials@f2964c7281262753f549b15ae39f1cbbb033b9e4
+        uses: aws-actions/configure-aws-credentials@259eac73d3898af00550394d11116c4a94c9b1dc
         with:
           role-to-assume: ${{ secrets.TERRAFORM_ROLE }}
           aws-region: eu-west-2
@@ -43,7 +43,7 @@ jobs:
         with:
           message: ":warning: Secrets found in repository: *${{ inputs.repo-name }}* @channel"
           slack-url: ${{ secrets.SLACK_WEBHOOK }}
-      - uses: hashicorp/setup-terraform@4c5fdabea201636fa7ea13d8babd1ed828687f5d
+      - uses: hashicorp/setup-terraform@712b43959e9be7e82c34d18450fa5ec3237af3f1
         with:
           terraform_version: 1.9.8
       - name: Terraform Format
