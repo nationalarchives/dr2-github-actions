@@ -32,18 +32,18 @@ jobs:
         working-directory: ${{ inputs.working-directory }}
     steps:
       - name: Checkout
-        uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8
         with:
           repository: nationalarchives/${{ inputs.repo-name }}
           submodules: recursive
           token: ${{ secrets.WORKFLOW_TOKEN }}
       - name: Configure AWS credentials for Lambda
-        uses: aws-actions/configure-aws-credentials@259eac73d3898af00550394d11116c4a94c9b1dc
+        uses: aws-actions/configure-aws-credentials@d4695650384537945e0b565ee73a714d361bcb04
         with:
           role-to-assume: ${{ secrets.TERRAFORM_ROLE }}
           aws-region: eu-west-2
           role-session-name: TerraformRole
-      - uses: hashicorp/setup-terraform@712b43959e9be7e82c34d18450fa5ec3237af3f1
+      - uses: hashicorp/setup-terraform@92e4d08fe1d24283952afa28216efa8f4ed5aeab
       - name: Terraform Plan
         id: plan
         env:
@@ -77,18 +77,18 @@ jobs:
     environment: ${{ inputs.environment }}
     steps:
       - name: Checkout
-        uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8
         with:
           repository: nationalarchives/${{ inputs.repo-name }}
           submodules: recursive
           token: ${{ secrets.WORKFLOW_TOKEN }}
       - name: Configure AWS credentials for Lambda
-        uses: aws-actions/configure-aws-credentials@259eac73d3898af00550394d11116c4a94c9b1dc
+        uses: aws-actions/configure-aws-credentials@d4695650384537945e0b565ee73a714d361bcb04
         with:
           role-to-assume: ${{ secrets.TERRAFORM_ROLE }}
           aws-region: eu-west-2
           role-session-name: TerraformRole
-      - uses: hashicorp/setup-terraform@712b43959e9be7e82c34d18450fa5ec3237af3f1
+      - uses: hashicorp/setup-terraform@92e4d08fe1d24283952afa28216efa8f4ed5aeab
       - name: Run apply
         env:
           GITHUB_OWNER: nationalarchives
