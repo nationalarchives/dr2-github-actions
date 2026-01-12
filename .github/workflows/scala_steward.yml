@@ -20,7 +20,7 @@ jobs:
           gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
           passphrase: ${{ secrets.GPG_PASSPHRASE }}
       - name: Launch Scala Steward
-        uses: scala-steward-org/scala-steward-action@f60ccd18bc9d8083e6809d9dc3db4a69a71d856c
+        uses: scala-steward-org/scala-steward-action@5bbb0a3f32b42774f8ba1ed18c29db5d915d2200
         with:
           github-token: ${{ secrets.WORKFLOW_TOKEN }}
           sign-commits: true
