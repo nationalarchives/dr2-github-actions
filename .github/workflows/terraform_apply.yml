@@ -38,7 +38,7 @@ jobs:
           submodules: recursive
           token: ${{ secrets.WORKFLOW_TOKEN }}
       - name: Configure AWS credentials for Lambda
-        uses: aws-actions/configure-aws-credentials@6ebc88dc2e550247a73cd8cbf189bbc7fd61c3b4
+        uses: aws-actions/configure-aws-credentials@e1b30a229e9414108545ddc70b41cf676c68a23f
         with:
           role-to-assume: ${{ secrets.TERRAFORM_ROLE }}
           aws-region: eu-west-2
@@ -83,7 +83,7 @@ jobs:
           submodules: recursive
           token: ${{ secrets.WORKFLOW_TOKEN }}
       - name: Configure AWS credentials for Lambda
-        uses: aws-actions/configure-aws-credentials@6ebc88dc2e550247a73cd8cbf189bbc7fd61c3b4
+        uses: aws-actions/configure-aws-credentials@e1b30a229e9414108545ddc70b41cf676c68a23f
         with:
           role-to-assume: ${{ secrets.TERRAFORM_ROLE }}
           aws-region: eu-west-2
