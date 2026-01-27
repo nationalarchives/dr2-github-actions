@@ -32,18 +32,18 @@ jobs:
         working-directory: ${{ inputs.working-directory }}
     steps:
       - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           repository: nationalarchives/${{ inputs.repo-name }}
           submodules: recursive
           token: ${{ secrets.WORKFLOW_TOKEN }}
       - name: Configure AWS credentials for Lambda
-        uses: aws-actions/configure-aws-credentials@e1b30a229e9414108545ddc70b41cf676c68a23f
+        uses: aws-actions/configure-aws-credentials@61815dcd50bd041e203e49132bacad1fd04d2708  # v5.1.1
         with:
           role-to-assume: ${{ secrets.TERRAFORM_ROLE }}
           aws-region: eu-west-2
           role-session-name: TerraformRole
-      - uses: hashicorp/setup-terraform@dcc3150f6037c0405dd84cb44d1d91ebbaa96514
+      - uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd # v3.1.2
       - name: Terraform Plan
         id: plan
         env:
@@ -77,18 +77,18 @@ jobs:
     environment: ${{ inputs.environment }}
     steps:
       - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           repository: nationalarchives/${{ inputs.repo-name }}
           submodules: recursive
           token: ${{ secrets.WORKFLOW_TOKEN }}
       - name: Configure AWS credentials for Lambda
-        uses: aws-actions/configure-aws-credentials@e1b30a229e9414108545ddc70b41cf676c68a23f
+        uses: aws-actions/configure-aws-credentials@61815dcd50bd041e203e49132bacad1fd04d2708  # v5.1.1
         with:
           role-to-assume: ${{ secrets.TERRAFORM_ROLE }}
           aws-region: eu-west-2
           role-session-name: TerraformRole
-      - uses: hashicorp/setup-terraform@dcc3150f6037c0405dd84cb44d1d91ebbaa96514
+      - uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd # v3.1.2
       - name: Run apply
         env:
           GITHUB_OWNER: nationalarchives
