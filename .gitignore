@@ -1,1 +1,4 @@
 .idea
+
+# macOS-specific
+**/.DS_Store
