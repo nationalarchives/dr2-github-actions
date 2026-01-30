@@ -10,17 +10,17 @@ jobs:
     runs-on: ubuntu-latest
     name: Launch Scala Steward
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - name: Import GPG key
         id: import_gpg
-        uses: crazy-max/ghaction-import-gpg@e89d40939c28e39f97cf32126055eeae86ba74ec
+        uses: crazy-max/ghaction-import-gpg@e89d40939c28e39f97cf32126055eeae86ba74ec # v6.3.0
         with:
           git_user_signingkey: true
           git_commit_gpgsign: true
           gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
           passphrase: ${{ secrets.GPG_PASSPHRASE }}
       - name: Launch Scala Steward
-        uses: scala-steward-org/scala-steward-action@91f0a480668e574d7d1b413b19ee8240c56cd629
+        uses: scala-steward-org/scala-steward-action@5bbb0a3f32b42774f8ba1ed18c29db5d915d2200 # v2.80.0
         with:
           github-token: ${{ secrets.WORKFLOW_TOKEN }}
           sign-commits: true
